@@ -2,6 +2,7 @@ package builder
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"os"
 	"path"
@@ -222,6 +223,9 @@ func (be *localBuildExecutor) Execute(ctx context.Context, request *remoteexecut
 	if err != nil {
 		return convertErrorToExecuteResponse(util.StatusWrap(err, "Failed to obtain action")), false
 	}
+
+	fmt.Println("Action >> ", action)
+
 	commandDigest, err := actionDigest.NewDerivedDigest(action.CommandDigest)
 	if err != nil {
 		return convertErrorToExecuteResponse(util.StatusWrap(err, "Failed to extract digest for command")), false
@@ -230,6 +234,9 @@ func (be *localBuildExecutor) Execute(ctx context.Context, request *remoteexecut
 	if err != nil {
 		return convertErrorToExecuteResponse(util.StatusWrap(err, "Failed to obtain command")), false
 	}
+
+	fmt.Println("Command >> ", command)
+
 	timeAfterGetActionCommand := time.Now()
 	localBuildExecutorDurationSecondsGetActionCommand.Observe(
 		timeAfterGetActionCommand.Sub(timeStart).Seconds())
